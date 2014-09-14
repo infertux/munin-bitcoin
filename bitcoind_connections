@@ -13,6 +13,7 @@ bitcoind_connections - Plugin to monitor the number of open connections
  [bitcoind*]
     user bitcoin
     env.binary bitcoin-cli
+    env.data_dir /var/lib/bitcoin
 
 =head1 AUTHOR
 
@@ -30,6 +31,7 @@ AGPLv3+
 =cut
 
 BINARY=${binary:-"bitcoin-cli"}
+DATA_DIR=${data_dir:-"/var/lib/bitcoin"}
 
 if [ "$1" = "autoconf" ]; then
     autoconf="yes"
@@ -50,5 +52,5 @@ if [ "$1" = "config" ]; then
     exit 0
 fi
 
-echo "bitcoind_connections.value $($BINARY getconnectioncount)"
+echo "bitcoind_connections.value $($BINARY -datadir=$DATA_DIR getconnectioncount)"
 
