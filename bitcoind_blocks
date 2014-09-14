@@ -10,9 +10,9 @@ bitcoind_blocks - Plugin to monitor the number of blocks
 
 =head1 CONFIGURATION
 
-No configuration
  [bitcoind*]
     user bitcoin
+    env.binary bitcoin-cli
 
 =head1 AUTHOR
 
@@ -29,10 +29,12 @@ AGPLv3+
 
 =cut
 
+BINARY=${binary:-"bitcoin-cli"}
+
 if [ "$1" = "autoconf" ]; then
     autoconf="yes"
 
-    command -v bitcoin-cli >/dev/null || autoconf="no"
+    command -v $BINARY >/dev/null || autoconf="no"
 
     echo $autoconf
     exit 0
@@ -48,5 +50,5 @@ if [ "$1" = "config" ]; then
     exit 0
 fi
 
-echo "bitcoind_blocks.value $(bitcoin-cli getblockcount)"
+echo "bitcoind_blocks.value $($BINARY getblockcount)"
 

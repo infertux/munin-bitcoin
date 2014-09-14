@@ -10,9 +10,9 @@ bitcoind_blockchain_size - Plugin to monitor the size of the blockchain
 
 =head1 CONFIGURATION
 
-No configuration
  [bitcoind*]
     user bitcoin
+    env.data_dir /var/lib/bitcoin
 
 =head1 AUTHOR
 
@@ -29,10 +29,13 @@ AGPLv3+
 
 =cut
 
+DATA_DIR=${data_dir:-"/var/lib/bitcoin"}
+BLOCK_DIR="${DATA_DIR}/blocks"
+
 if [ "$1" = "autoconf" ]; then
     autoconf="yes"
 
-    [ -d /var/lib/bitcoin/blocks ] || autoconf="no"
+    [ -d $BLOCK_DIR ] || autoconf="no"
 
     echo $autoconf
     exit 0
@@ -48,5 +51,5 @@ if [ "$1" = "config" ]; then
     exit 0
 fi
 
-echo "bitcoind_blockchain_size.value $(du --block-size=1 -s /var/lib/bitcoin/blocks | awk '{print $1}')"
+echo "bitcoind_blockchain_size.value $(du --block-size=1 -s $BLOCK_DIR | awk '{print $1}')"
 
