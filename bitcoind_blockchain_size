@@ -1,0 +1,52 @@
+#!/bin/sh
+# -*- sh -*-
+# vim: ft=sh
+
+: << =cut
+
+=head1 NAME
+
+bitcoind_blockchain_size - Plugin to monitor the size of the blockchain
+
+=head1 CONFIGURATION
+
+No configuration
+ [bitcoind*]
+    user bitcoin
+
+=head1 AUTHOR
+
+Cedric Felizard
+
+=head1 LICENSE
+
+AGPLv3+
+
+=head1 MAGIC MARKERS
+
+ #%# family=auto
+ #%# capabilities=autoconf
+
+=cut
+
+if [ "$1" = "autoconf" ]; then
+    autoconf="yes"
+
+    [ -d /var/lib/bitcoin/blocks ] || autoconf="no"
+
+    echo $autoconf
+    exit 0
+fi
+
+if [ "$1" = "config" ]; then
+    echo 'graph_title Blockchain size'
+    echo 'graph_vlabel size'
+    echo 'graph_category bitcoind'
+    echo 'graph_info This graph shows the size of the blockchain in bytes.'
+    echo 'bitcoind_blockchain_size.label size'
+    echo 'bitcoind_blockchain_size.info The size of the blockchain in bytes.'
+    exit 0
+fi
+
+echo "bitcoind_blockchain_size.value $(du --block-size=1 -s /var/lib/bitcoin/blocks | awk '{print $1}')"
+

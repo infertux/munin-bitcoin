@@ -1,0 +1,52 @@
+#!/bin/sh
+# -*- sh -*-
+# vim: ft=sh
+
+: << =cut
+
+=head1 NAME
+
+bitcoind_blocks - Plugin to monitor the number of blocks
+
+=head1 CONFIGURATION
+
+No configuration
+ [bitcoind*]
+    user bitcoin
+
+=head1 AUTHOR
+
+Cedric Felizard
+
+=head1 LICENSE
+
+AGPLv3+
+
+=head1 MAGIC MARKERS
+
+ #%# family=auto
+ #%# capabilities=autoconf
+
+=cut
+
+if [ "$1" = "autoconf" ]; then
+    autoconf="yes"
+
+    command -v bitcoin-cli >/dev/null || autoconf="no"
+
+    echo $autoconf
+    exit 0
+fi
+
+if [ "$1" = "config" ]; then
+    echo 'graph_title Block count'
+    echo 'graph_vlabel number of blocks'
+    echo 'graph_category bitcoind'
+    echo 'graph_info This graph shows the number of blocks.'
+    echo 'bitcoind_blocks.label blocks'
+    echo 'bitcoind_blocks.info The current number of blocks.'
+    exit 0
+fi
+
+echo "bitcoind_blocks.value $(bitcoin-cli getblockcount)"
+
