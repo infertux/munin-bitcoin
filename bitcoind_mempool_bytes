@@ -6,7 +6,7 @@
 
 =head1 NAME
 
-bitcoind_connections - Plugin to monitor the number of open connections
+bitcoind_mempool - Plugin to monitor the size of the mempool
 
 =head1 CONFIGURATION
 
@@ -30,6 +30,12 @@ AGPLv3+
 
 =cut
 
+METRIC=${0##*/bitcoind_mempool_}
+case $METRIC in
+  size|bytes);;
+  *) exit 1;;
+esac
+
 BINARY=${binary:-"/usr/bin/bitcoin-cli"}
 DATA_DIR=${data_dir:-"/var/lib/bitcoin"}
 
@@ -43,14 +49,14 @@ if [ "$1" = "autoconf" ]; then
 fi
 
 if [ "$1" = "config" ]; then
-    echo 'graph_title Connection count'
-    echo 'graph_vlabel number of connections'
-    echo 'graph_category bitcoind'
-    echo 'graph_info This graph shows the number of open connections.'
-    echo 'bitcoind_connections.label connections'
-    echo 'bitcoind_connections.info The current number of open connections.'
+    echo "graph_title Mempool ${METRIC}"
+    echo "graph_vlabel ${METRIC}"
+    echo "graph_category bitcoind"
+    echo "${METRIC}.label mempool (${METRIC})"
     exit 0
 fi
 
-echo "bitcoind_connections.value $($BINARY -datadir=$DATA_DIR getconnectioncount)"
+mempool="$($BINARY -datadir=$DATA_DIR getmempoolinfo)"
+value=$(echo "$mempool" | grep $METRIC | grep -o '[0-9]*')
 
+echo "${METRIC}.value $(echo $value)"

@@ -6,7 +6,7 @@
 
 =head1 NAME
 
-bitcoind_connections - Plugin to monitor the number of open connections
+bitcoind_blockchain_verification - Plugin to monitor the blockchain verification percentage
 
 =head1 CONFIGURATION
 
@@ -43,14 +43,14 @@ if [ "$1" = "autoconf" ]; then
 fi
 
 if [ "$1" = "config" ]; then
-    echo 'graph_title Connection count'
-    echo 'graph_vlabel number of connections'
+    echo 'graph_title Blockchain verification'
+    echo 'graph_vlabel percentage'
     echo 'graph_category bitcoind'
-    echo 'graph_info This graph shows the number of open connections.'
-    echo 'bitcoind_connections.label connections'
-    echo 'bitcoind_connections.info The current number of open connections.'
+    echo 'graph_info This graph shows the blockchain verification progress.'
+    echo 'bitcoind_blockchain_verification.label blockchain verification'
+    echo 'bitcoind_blockchain_verification.info The current progress of the blockchain verification.'
     exit 0
 fi
 
-echo "bitcoind_connections.value $($BINARY -datadir=$DATA_DIR getconnectioncount)"
+echo "bitcoind_blockchain_verification.value $($BINARY -datadir=$DATA_DIR getblockchaininfo | grep verificationprogress | grep -o '[0-9.]*')"
 

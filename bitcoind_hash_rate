@@ -6,14 +6,12 @@
 
 =head1 NAME
 
-bitcoind_connections - Plugin to monitor the number of open connections
+bitcoind_hash_rate - Plugin to monitor the hash rate
 
 =head1 CONFIGURATION
 
  [bitcoind*]
     user bitcoin
-    env.binary bitcoin-cli
-    env.data_dir /var/lib/bitcoin
 
 =head1 AUTHOR
 
@@ -43,14 +41,14 @@ if [ "$1" = "autoconf" ]; then
 fi
 
 if [ "$1" = "config" ]; then
-    echo 'graph_title Connection count'
-    echo 'graph_vlabel number of connections'
+    echo 'graph_title Hash rate'
+    echo 'graph_vlabel number of hashes per second'
     echo 'graph_category bitcoind'
-    echo 'graph_info This graph shows the number of open connections.'
-    echo 'bitcoind_connections.label connections'
-    echo 'bitcoind_connections.info The current number of open connections.'
+    echo 'graph_info This graph shows the number of hashes per second.'
+    echo 'bitcoind_hash_rate.label hash rate'
+    echo 'bitcoind_hash_rate.info The current number of hashes per second.'
     exit 0
 fi
 
-echo "bitcoind_connections.value $($BINARY -datadir=$DATA_DIR getconnectioncount)"
+echo "bitcoind_hash_rate.value $($BINARY -datadir=$DATA_DIR gethashespersec)"
 

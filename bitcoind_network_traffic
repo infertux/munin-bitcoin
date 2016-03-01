@@ -6,7 +6,7 @@
 
 =head1 NAME
 
-bitcoind_connections - Plugin to monitor the number of open connections
+bitcoind_network_traffic - Plugin to monitor the network traffic
 
 =head1 CONFIGURATION
 
@@ -43,14 +43,14 @@ if [ "$1" = "autoconf" ]; then
 fi
 
 if [ "$1" = "config" ]; then
-    echo 'graph_title Connection count'
-    echo 'graph_vlabel number of connections'
+    echo 'graph_title Network traffic'
+    echo 'graph_vlabel bytes'
     echo 'graph_category bitcoind'
-    echo 'graph_info This graph shows the number of open connections.'
-    echo 'bitcoind_connections.label connections'
-    echo 'bitcoind_connections.info The current number of open connections.'
+    echo 'graph_info This graph shows the sum of incoming and outgoing traffic.'
+    echo 'bitcoind_network_traffic.label network traffic'
+    echo 'bitcoind_network_traffic.info The network traffic.'
     exit 0
 fi
 
-echo "bitcoind_connections.value $($BINARY -datadir=$DATA_DIR getconnectioncount)"
+echo "bitcoind_network_traffic.value $($BINARY -datadir=$DATA_DIR getnettotals | grep totalbytes | grep -o '[0-9]*' | sed "N;s/\n/+/" | bc)"
 

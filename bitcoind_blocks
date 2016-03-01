@@ -30,7 +30,7 @@ AGPLv3+
 
 =cut
 
-BINARY=${binary:-"bitcoin-cli"}
+BINARY=${binary:-"/usr/bin/bitcoin-cli"}
 DATA_DIR=${data_dir:-"/var/lib/bitcoin"}
 
 if [ "$1" = "autoconf" ]; then
