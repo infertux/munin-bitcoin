@@ -6,7 +6,7 @@
 
 =head1 NAME
 
-bitcoind_hash_rate - Plugin to monitor the hash rate
+bitcoind_difficulty - Plugin to monitor the mining difficulty
 
 =head1 CONFIGURATION
 
@@ -41,14 +41,14 @@ if [ "$1" = "autoconf" ]; then
 fi
 
 if [ "$1" = "config" ]; then
-    echo 'graph_title Hash rate'
-    echo 'graph_vlabel number of hashes per second'
+    echo 'graph_title Difficulty'
+    echo 'graph_vlabel difficulty'
     echo 'graph_category bitcoind'
-    echo 'graph_info This graph shows the number of hashes per second.'
-    echo 'bitcoind_hash_rate.label hash rate'
-    echo 'bitcoind_hash_rate.info The current number of hashes per second.'
+    echo 'graph_info This graph shows the mining difficulty.'
+    echo 'bitcoind_difficulty.label difficulty'
+    echo 'bitcoind_difficulty.info The current mining difficulty.'
     exit 0
 fi
 
-echo "bitcoind_hash_rate.value $($BINARY -datadir=$DATA_DIR gethashespersec)"
+echo "bitcoind_difficulty.value $($BINARY -datadir=$DATA_DIR getdifficulty)"
 
